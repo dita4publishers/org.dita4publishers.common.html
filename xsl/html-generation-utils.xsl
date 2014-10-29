@@ -67,18 +67,40 @@
     <xsl:param name="topicDoc" as="document-node()"/>
     <xsl:param name="rootMapDocUrl" as="xs:string"/>
     
+    <xsl:sequence 
+      select="htmlutil:getTopicResultUrl(
+                  $outdir, 
+                  $topicDoc, 
+                  $rootMapDocUrl, 
+                  $debugBoolean)"
+    />
+</xsl:function>
+  
+  <xsl:function name="htmlutil:getTopicResultUrl" as="xs:string">
+    <xsl:param name="outdir" as="xs:string"/><!-- Output directory -->
+    <xsl:param name="topicDoc" as="document-node()"/>
+    <xsl:param name="rootMapDocUrl" as="xs:string"/>
+    <xsl:param name="doDebug" as="xs:boolean"/>
+    
+    <xsl:if test="$doDebug">
+      <xsl:message> + [DEBUG] htmlutil:getTopicResultUrl(): rootMapDocUrl="<xsl:value-of select="$rootMapDocUrl"/>"</xsl:message>
+      <xsl:message> + [DEBUG] htmlutil:getTopicResultUrl(): fileOrganizationStrategy="<xsl:value-of select="$fileOrganizationStrategy"/>"</xsl:message>
+    </xsl:if>
+    
     <xsl:variable name="resultUrl" as="xs:string?">
       <xsl:choose>
         <xsl:when test="$fileOrganizationStrategy = 'single-dir' or $rootMapDocUrl = ''">
           <xsl:for-each select="$topicDoc">
             <xsl:call-template name="get-topic-result-url-single-dir">
-              <xsl:with-param name="outdir" select="$outdir" as="xs:string"/>    
+              <xsl:with-param name="doDebug" as="xs:boolean" tunnel="yes" select="$doDebug"/>
+              <xsl:with-param name="outdir" select="$outdir" as="xs:string"/>   
             </xsl:call-template>
           </xsl:for-each>
         </xsl:when>
         <xsl:otherwise>
           <xsl:for-each select="$topicDoc">
             <xsl:apply-templates select="." mode="get-topic-result-url">
+              <xsl:with-param name="doDebug" as="xs:boolean" tunnel="yes" select="$doDebug"/>
               <xsl:with-param name="outdir" tunnel="yes" select="$outdir" as="xs:string"/>            
               <xsl:with-param name="rootMapDocUrl" tunnel="yes" select="$rootMapDocUrl" as="xs:string"/>            
             </xsl:apply-templates>
@@ -86,7 +108,9 @@
         </xsl:otherwise>
       </xsl:choose>
     </xsl:variable>
-<!--    <xsl:message> + [DEBUG] getTopicResultUrl(): resultUrl="<xsl:sequence select="$resultUrl"/>"</xsl:message>-->
+    <xsl:if test="$doDebug">
+      <xsl:message> + [DEBUG] getTopicResultUrl(): resultUrl="<xsl:sequence select="$resultUrl"/>"</xsl:message>
+    </xsl:if>
     <xsl:sequence select="$resultUrl"/>
   </xsl:function>
   
