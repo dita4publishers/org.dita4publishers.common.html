@@ -7,6 +7,8 @@
        so that a given module is imported exactly once.
   -->
   <require plugin="org.dita-community.common.xslt"/> 
+  <feature extension="package.support.name" value="Eliot Kimber"/>
+  <feature extension="package.support.email" value="ekimber@contrext.com"/>
   
   
 </plugin>
