@@ -76,11 +76,7 @@
     <xsl:call-template name="start-flagit">
       <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>     
     </xsl:call-template>
-<!-- WEK: For 1.7, start-revflag is deprecated. See flag.xsl
-      <xsl:call-template name="start-revflag">
-      <xsl:with-param name="flagrules" select="$flagrules"/>
-    </xsl:call-template>
--->    <div>
+    <div>
       <xsl:if test="$default-fig-class!=''">
         <xsl:attribute name="class"><xsl:value-of select="$default-fig-class"/></xsl:attribute>
       </xsl:if>
@@ -90,11 +86,6 @@
       <xsl:if test="not(@id)">
         <xsl:attribute name="id" select="df:generate-dita-id(.)"/>
       </xsl:if>
-<!--   WEK: For 1.7, this template is deprecated.
-        <xsl:call-template name="gen-style">
-        <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>
-      </xsl:call-template>
--->      
       <xsl:call-template name="setscale"/>
       <xsl:call-template name="setidaname"/>
       <div class="figbody">
@@ -105,11 +96,6 @@
       <!-- WEK: Put the figure label below the figure content -->
       <xsl:call-template name="place-fig-lbl"/>
     </div>
-<!-- WEK: end-revflag is deprecated in 1.7
-     <xsl:call-template name="end-revflag">
-      <xsl:with-param name="flagrules" select="$flagrules"/>
-    </xsl:call-template>
--->   
     <xsl:call-template name="end-flagit">
       <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param> 
     </xsl:call-template>
@@ -134,7 +120,9 @@
         <xsl:variable name="sourceId" select="df:generate-dita-id(.)" as="xs:string"/>
         <span class="figcap">
           <xsl:apply-templates select="$collected-data/enum:enumerables//*[@sourceId = $sourceId]"
-            mode="enumeration"/>
+            mode="enumeration">
+            <xsl:with-param name="ancestorlang" as="xs:string" select="$ancestorlang"/>
+          </xsl:apply-templates>
           <xsl:apply-templates select="*[contains(@class,' topic/title ')]" mode="figtitle"/>
         </span>
         <xsl:if test="*[contains(@class,' topic/desc ')]">
@@ -172,7 +160,9 @@
             <xsl:variable name="sourceId" select="df:generate-dita-id(.)" as="xs:string"/>
             <span class="tablecap">
               <xsl:apply-templates select="$collected-data/enum:enumerables//*[@sourceId = $sourceId]"
-                mode="enumeration"/>
+                mode="enumeration">
+                <xsl:with-param name="ancestorlang" as="xs:string" select="$ancestorlang"/>
+              </xsl:apply-templates>
               <xsl:apply-templates select="*[contains(@class,' topic/title ')]" mode="tabletitle"/>         
             </span>
           </span>

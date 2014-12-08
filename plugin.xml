@@ -9,6 +9,9 @@
   <require plugin="org.dita-community.common.xslt"/> 
   <feature extension="package.support.name" value="Eliot Kimber"/>
   <feature extension="package.support.email" value="ekimber@contrext.com"/>
+  <extension-point id="d4p.common.html.param" behavior="org.dita.dost.platform.InsertAction"/>
   
+  <feature extension="d4p.common.html.param" value="parameters.xml" type="file" />
+
   
 </plugin>
