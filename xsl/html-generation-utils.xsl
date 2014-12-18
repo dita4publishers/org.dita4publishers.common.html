@@ -58,7 +58,7 @@
   <!-- returns the hash value of a topicref -->
   <xsl:function name="htmlutil:getTopicrefUrlHash" as="xs:string">
     <xsl:param name="topicDoc" as="element()"/>
-    <xsl:value-of select="concat('#', substring-after($topicDoc/@href, '#'))"/>
+    <xsl:value-of select="concat('#', relpath:getFragmentId($topicDoc/@href))"/>
   </xsl:function>
 
   <xsl:function name="htmlutil:getTopicResultUrl" as="xs:string">
