@@ -70,12 +70,7 @@
     <xsl:variable name="default-fig-class">
       <xsl:apply-templates select="." mode="dita2html:get-default-fig-class"/>
     </xsl:variable>
-    <xsl:variable name="flagrules">
-      <xsl:call-template name="getrules"/>
-    </xsl:variable>
-    <xsl:call-template name="start-flagit">
-      <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>     
-    </xsl:call-template>
+    <xsl:call-template name="start-flagit"/>
     <div>
       <xsl:if test="$default-fig-class!=''">
         <xsl:attribute name="class"><xsl:value-of select="$default-fig-class"/></xsl:attribute>
@@ -96,9 +91,7 @@
       <!-- WEK: Put the figure label below the figure content -->
       <xsl:call-template name="place-fig-lbl"/>
     </div>
-    <xsl:call-template name="end-flagit">
-      <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param> 
-    </xsl:call-template>
+    <xsl:call-template name="end-flagit"/>
     <xsl:value-of select="$newline"/>
   </xsl:template>
   
