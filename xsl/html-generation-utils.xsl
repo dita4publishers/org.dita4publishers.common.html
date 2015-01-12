@@ -242,7 +242,7 @@
     <xsl:param name="rootMapDocUrl" as="xs:string"/>
 
 
-    <xsl:variable name="initialTopicRef" select="$topicRefs[1]" as="element()?"/>
+    <xsl:variable name="initialTopicRef" select="$topicRefs[1][not(@scope = ('peer', 'external'))]" as="element()?"/>
     <xsl:choose>
       <xsl:when test="$initialTopicRef">
         <xsl:variable name="initialTopic" select="df:resolveTopicRef($initialTopicRef)" as="element()?"/>
