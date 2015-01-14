@@ -12,7 +12,7 @@
   xmlns="http://www.w3.org/1999/xhtml"
   exclude-result-prefixes="df xs relpath htmlutil opf dc xd enum d4p"
   version="2.0">
-  
+
   <xsl:param name="d4p.numberTables" as="xs:string" select="'xxxx'"/>
   <xsl:variable name="d4p:doNumberTables" as="xs:boolean"
     select="matches($d4p.numberTables, 'yes|true|on|1', 'i')"
@@ -21,13 +21,13 @@
   <xsl:variable name="d4p:doNumberFigures" as="xs:boolean"
     select="matches($d4p.numberFigures, 'yes|true|on|1', 'i')"
   />
-  
+
   <!-- Enumeration handling for HTML outputs -->
-  
+
   <xsl:template mode="enumeration"  match="*[df:class(., 'topic/fig')][enum:title]">
     <xsl:param name="ancestorlang" as="xs:string" select="'en'"/>
-    <!-- Context item should be enum:* from the collected-data 
-        
+    <!-- Context item should be enum:* from the collected-data
+
          NOTE: Within the collected data, all titles are normalized
          to enum:title with no @class attribute.
     -->
@@ -59,12 +59,12 @@
       </span>
     </xsl:if>
   </xsl:template>
-  
+
   <xsl:template mode="enumeration"  match="*[df:class(., 'topic/table')][enum:title]">
     <xsl:param name="ancestorlang" as="xs:string" select="'en'"/>
 
-    <!-- Context item should be enum:* from the collected-data 
-        
+    <!-- Context item should be enum:* from the collected-data
+
          NOTE: Within the collected data, all titles are normalized
          to enum:title with no @class attribute.
     -->
@@ -97,62 +97,68 @@
       </span>
     </xsl:if>
   </xsl:template>
-  
-  <xsl:template mode="enumeration" match="*[df:class(., 'pubmap-d/part')]" 
+
+  <xsl:template mode="enumeration" match="*[df:class(., 'pubmap-d/part')]"
     priority="10">
     <span class='enumeration_part'>
-      <xsl:text>Part </xsl:text><!-- FIXME: Enable localization of the string. -->
-      <!-- When maps are merged, if there are two root topicrefs, both get the class of the referencing 
+        <xsl:call-template name="getString">
+          <xsl:with-param name="stringName" select="'Part'"/>
+        </xsl:call-template>
+      <!-- When maps are merged, if there are two root topicrefs, both get the class of the referencing
            topicref, e.g., <keydefs/><part/> as the children of the target map becomes two mapref topicrefs in the
            merged result. -->
       <xsl:number count="*[df:class(., 'pubmap-d/part')][not(@processing-role = 'resource-only')]" format="I" level="single"/>
       <xsl:text>. </xsl:text>
     </span>
   </xsl:template>
-  
-  <xsl:template mode="enumeration" 
+
+  <xsl:template mode="enumeration"
     match="*[df:class(., 'pubmap-d/pubbody')]//*[df:class(., 'pubmap-d/chapter')]"
     >
     <span class='enumeration_chapter'>
-      <xsl:text>Chapter </xsl:text><!-- FIXME: Enable localization of the string. -->
-      <xsl:number 
-        count="*[df:class(., 'pubmap-d/chapter')][not(@processing-role = 'resource-only')]" 
-        format="1." 
-        level="any" 
+        <xsl:call-template name="getString">
+          <xsl:with-param name="stringName" select="'Chapter'"/>
+        </xsl:call-template>
+      <xsl:number
+        count="*[df:class(., 'pubmap-d/chapter')][not(@processing-role = 'resource-only')]"
+        format="1."
+        level="any"
         from="*[df:class(., 'pubmap-d/pubbody')]"/>
       <xsl:text> </xsl:text>
     </span>
   </xsl:template>
-  
-  <xsl:template mode="enumeration" 
+
+  <xsl:template mode="enumeration"
     match="*[df:class(., 'pubmap-d/frontmatter')]//*[df:class(., 'pubmap-d/chapter')] |
            *[df:class(., 'pubmap-d/backmatter')]//*[df:class(., 'pubmap-d/chapter')]">
     <!-- Frontmatter and backmatter chapters are not enumerated -->
   </xsl:template>
-  
-  <xsl:template mode="enumeration" 
-    match="*[df:class(., 'pubmap-d/appendix')] | 
+
+  <xsl:template mode="enumeration"
+    match="*[df:class(., 'pubmap-d/appendix')] |
     *[df:class(., 'pubmap-d/appendixes')]/*[df:isTopicRef(.)]
     ">
     <span class='enumeration_chapter'>
-      <xsl:text>Appendix </xsl:text><!-- FIXME: Enable localization of the string. -->
-      <xsl:number 
-        count="*[df:class(., 'map/topicref')][not(@processing-role = 'resource-only')]" 
-        format="A." 
-        level="single" 
+        <xsl:call-template name="getString">
+          <xsl:with-param name="stringName" select="'Appendix'"/>
+        </xsl:call-template>
+      <xsl:number
+        count="*[df:class(., 'map/topicref')][not(@processing-role = 'resource-only')]"
+        format="A."
+        level="single"
         from="*[df:class(., 'pubmap-d/appendixes')]"/>
       <xsl:text> </xsl:text>
     </span>
   </xsl:template>
-  
+
   <xsl:template match="*" mode="report-parameters" priority="-1">
     <xsl:message>
       Common HTML Enumeration Parameters:
 
       + d4p.numberFigures = "<xsl:sequence select="$d4p.numberFigures"/>" (<xsl:value-of select="$d4p:doNumberFigures"/>)
       + d4p.numberTables = "<xsl:sequence select="$d4p.numberTables"/>"  (<xsl:value-of select="$d4p:doNumberTables"/>)
-    </xsl:message>    
+    </xsl:message>
   </xsl:template>
-  
-  
+
+
 </xsl:stylesheet>
