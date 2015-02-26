@@ -35,6 +35,7 @@
     <xsl:output-character character="&#154;" string="&#x0161;"/><!-- š x9A -->
     <xsl:output-character character="&#155;" string="&#x203A;"/><!-- › x9B -->
     <xsl:output-character character="&#156;" string="&#x0153;"/><!-- œ x9C -->
+    <xsl:output-character character="&#157;" string="''"/><!-- Control character, no equivalent -->
     <xsl:output-character character="&#158;" string="&#x017E;"/><!-- ž x9E -->
     <xsl:output-character character="&#159;" string="&#x0178;"/><!-- Ÿ x9F -->
   </xsl:character-map>
