@@ -42,7 +42,7 @@
          <xsl:choose>      <!-- Hungarian: "1. Figure " -->
           <xsl:when test="((string-length($ancestorlang) = 5 and contains($ancestorlang, 'hu-hu')) or
                            (string-length($ancestorlang) = 2 and contains($ancestorlang, 'hu')) )">
-           <xsl:value-of select="figNumber"/><xsl:text>. </xsl:text>
+           <xsl:value-of select="$figNumber"/><xsl:text>. </xsl:text>
            <xsl:call-template name="getString">
             <xsl:with-param name="stringName" select="'Figure'"/>
            </xsl:call-template><xsl:text> </xsl:text>
