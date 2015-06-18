@@ -67,15 +67,44 @@
     <xsl:sequence select="htmlutil:getTopicResultUrl($outdir, $topicDoc, '')"/>
   </xsl:function>
 
+  <!-- This version adds required topicref parameter. -->
+  <xsl:function name="htmlutil:getTopicResultUrl2" as="xs:string">
+    <xsl:param name="outdir" as="xs:string"/><!-- Output directory -->
+    <xsl:param name="topicDoc" as="document-node()"/>
+    <xsl:param name="topicref" as="element()"/>
+    <xsl:sequence select="htmlutil:getTopicResultUrl2($outdir, $topicDoc, $topicref, '')"/>
+  </xsl:function>
+
+  <!-- NOTE: As of 6/2015, this version of the function is obsolete and
+             should be replaced with the getTopicResultUrl2() function.
+    -->
   <xsl:function name="htmlutil:getTopicResultUrl" as="xs:string">
     <xsl:param name="outdir" as="xs:string"/><!-- Output directory -->
     <xsl:param name="topicDoc" as="document-node()"/>
     <xsl:param name="rootMapDocUrl" as="xs:string"/>
 
     <xsl:sequence
-      select="htmlutil:getTopicResultUrl(
+      select="htmlutil:getTopicResultUrl2(
                   $outdir,
                   $topicDoc,
+                  (),
+                  $rootMapDocUrl,
+                  $debugBoolean)"
+    />
+</xsl:function>
+
+  <!-- This version adds required topicref parameter. -->
+  <xsl:function name="htmlutil:getTopicResultUrl2" as="xs:string">
+    <xsl:param name="outdir" as="xs:string"/><!-- Output directory -->
+    <xsl:param name="topicDoc" as="document-node()"/>
+    <xsl:param name="topicref" as="element()?"/>
+    <xsl:param name="rootMapDocUrl" as="xs:string"/>
+
+    <xsl:sequence
+      select="htmlutil:getTopicResultUrl2(
+                  $outdir,
+                  $topicDoc,
+                  $topicref,
                   $rootMapDocUrl,
                   $debugBoolean)"
     />
@@ -87,9 +116,26 @@
     <xsl:param name="rootMapDocUrl" as="xs:string"/>
     <xsl:param name="doDebug" as="xs:boolean"/>
 
+    <xsl:sequence select="htmlutil:getTopicResultUrl2(
+       $outdir,
+       $topicDoc,
+       (),
+       $rootMapDocUrl,
+       $doDebug
+      )"/>
+  </xsl:function>
+
+  <!-- This version adds required topicref parameter. -->
+  <xsl:function name="htmlutil:getTopicResultUrl2" as="xs:string">
+    <xsl:param name="outdir" as="xs:string"/><!-- Output directory -->
+    <xsl:param name="topicDoc" as="document-node()"/>
+    <xsl:param name="topicref" as="element()?"/>
+    <xsl:param name="rootMapDocUrl" as="xs:string"/>
+    <xsl:param name="doDebug" as="xs:boolean"/>
+
     <xsl:if test="$doDebug">
-      <xsl:message> + [DEBUG] htmlutil:getTopicResultUrl(): rootMapDocUrl="<xsl:value-of select="$rootMapDocUrl"/>"</xsl:message>
-      <xsl:message> + [DEBUG] htmlutil:getTopicResultUrl(): fileOrganizationStrategy="<xsl:value-of select="$fileOrganizationStrategy"/>"</xsl:message>
+      <xsl:message> + [DEBUG] htmlutil:getTopicResultUrl2(): rootMapDocUrl="<xsl:value-of select="$rootMapDocUrl"/>"</xsl:message>
+      <xsl:message> + [DEBUG] htmlutil:getTopicResultUrl2(): fileOrganizationStrategy="<xsl:value-of select="$fileOrganizationStrategy"/>"</xsl:message>
     </xsl:if>
 
     <xsl:variable name="resultUrl" as="xs:string?">
@@ -98,6 +144,7 @@
           <xsl:for-each select="$topicDoc">
             <xsl:call-template name="get-topic-result-url-single-dir">
               <xsl:with-param name="doDebug" as="xs:boolean" tunnel="yes" select="$doDebug"/>
+              <xsl:with-param name="topicref" tunnel="yes" select="$topicref" as="element()?"/>
               <xsl:with-param name="outdir" select="$outdir" as="xs:string"/>
             </xsl:call-template>
           </xsl:for-each>
@@ -107,6 +154,7 @@
             <xsl:apply-templates select="." mode="get-topic-result-url">
               <xsl:with-param name="doDebug" as="xs:boolean" tunnel="yes" select="$doDebug"/>
               <xsl:with-param name="outdir" tunnel="yes" select="$outdir" as="xs:string"/>
+              <xsl:with-param name="topicref" tunnel="yes" select="$topicref" as="element()?"/>
               <xsl:with-param name="rootMapDocUrl" tunnel="yes" select="$rootMapDocUrl" as="xs:string"/>
             </xsl:apply-templates>
           </xsl:for-each>
@@ -120,6 +168,7 @@
   </xsl:function>
 
   <xsl:template name="get-topic-result-url-single-dir" match="/">
+    <xsl:param name="topicref" tunnel="yes" as="element()?"/>
     <!-- Handle the single-dir file organization strategy.
 
          Named template allows override of this strategy.
@@ -135,6 +184,8 @@
   </xsl:template>
 
   <xsl:template mode="get-topic-result-base-url" match="/">
+    <xsl:param name="topicref" tunnel="yes" as="element()?"/>
+    
     <!-- Gets the result URL for the topic without any extension -->
     <xsl:param name="outdir" as="xs:string" tunnel="yes"/>
 
@@ -164,6 +215,8 @@
   </xsl:template>
 
   <xsl:template mode="get-topic-result-url" match="/">
+    <xsl:param name="topicref" tunnel="yes" as="element()?"/>
+    
     <xsl:variable name="baseTopicResultUrl" as="xs:string">
       <xsl:apply-templates select="." mode="get-topic-result-base-url"/>
     </xsl:variable>
@@ -206,15 +259,38 @@
   </xsl:function>
 
   <xsl:template name="get-result-topic-base-name-single-dir">
+    <xsl:param name="topicref" tunnel="yes" as="element()?"/>
     <xsl:param name="topicUri" as="xs:string"/>
-    <xsl:variable name="baseName" select="concat(relpath:getNamePart($topicUri), '_', generate-id(.))" as="xs:string"/>
+    
+    
+    <xsl:variable name="baseName"  as="xs:string">      
+      <xsl:choose>
+        <xsl:when test="string($topicref/@copy-to) != ''">
+          <xsl:sequence select="concat(relpath:getNamePart($topicref/@copy-to), '_', generate-id(.))"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:sequence select="concat(relpath:getNamePart($topicUri), '_', generate-id(.))"/>  
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
     <xsl:sequence select="$baseName"/>
   </xsl:template>
 
   <xsl:template match="/" mode="get-result-topic-base-name">
+    <xsl:param name="topicref" tunnel="yes" as="element()?"/>
     <xsl:param name="topicUri" as="xs:string"/>
+
     <!-- Default template for organizational strategies other than single-dir -->
-    <xsl:variable name="baseName" select="relpath:getNamePart($topicUri)" as="xs:string"/>
+    <xsl:variable name="baseName"  as="xs:string">      
+      <xsl:choose>
+        <xsl:when test="string($topicref/@copy-to) != ''">
+          <xsl:sequence select="relpath:getNamePart($topicref/@copy-to)"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:sequence select="relpath:getNamePart($topicUri)"/>  
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
     <xsl:sequence select="$baseName"/>
   </xsl:template>
 
