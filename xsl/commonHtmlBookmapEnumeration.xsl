@@ -36,7 +36,9 @@
                Once that bug is fixed the check should be unnecessary.
       -->
     <span class='enumeration_part'>      
-      <xsl:text>Part </xsl:text><!-- FIXME: Enable localization of the string. -->
+      <xsl:call-template name="getString">
+        <xsl:with-param name="stringName" select="'Part'"/>
+      </xsl:call-template>
       <xsl:number count="*[df:class(., 'bookmap/part')][not(df:isResourceOnly(.))]" format="I" level="single"/>
       <xsl:text>. </xsl:text>
     </span>
@@ -50,7 +52,9 @@
                Once that bug is fixed the check should be unnecessary.
       -->
     <span class='enumeration_chapter'>
-      <xsl:text>Chapter </xsl:text><!-- FIXME: Enable localization of the string. -->
+      <xsl:call-template name="getString">
+        <xsl:with-param name="stringName" select="'Chapter'"/>
+      </xsl:call-template>
       <xsl:number 
         count="*[df:class(., 'bookmap/chapter')][not(df:isResourceOnly(.))]" 
         format="1." 
