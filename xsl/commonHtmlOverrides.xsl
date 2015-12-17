@@ -66,7 +66,10 @@
     </div>
   </xsl:template>
   
-  <xsl:template match="*[contains(@class,' topic/fig ')]" mode="fig-fmt">
+  <!-- OT 1.8.5 version: -->
+  <xsl:template match="*[contains(@class,' topic/fig ')]" mode="fig-fmt" 
+    use-when="not(starts-with(system-property('OT_VERSION'), '2.'))"
+  >
     <xsl:variable name="default-fig-class">
       <xsl:apply-templates select="." mode="dita2html:get-default-fig-class"/>
     </xsl:variable>
@@ -94,6 +97,34 @@
     <xsl:call-template name="end-flagit"/>
     <xsl:value-of select="$newline"/>
   </xsl:template>
+  
+  <!-- OT 2.x version: -->
+  <xsl:template match="*[contains(@class, ' topic/fig ')]" name="topic.fig"
+    use-when="starts-with(system-property('OT_VERSION'), '2.')" 
+  >
+    <xsl:variable name="default-fig-class">
+      <xsl:apply-templates select="." mode="dita2html:get-default-fig-class"/>
+    </xsl:variable>
+    <xsl:apply-templates select="*[contains(@class, ' ditaot-d/ditaval-startprop ')]" mode="out-of-line"/>
+    <figure>
+      <xsl:if test="$default-fig-class != ''">
+        <xsl:attribute name="class" select="$default-fig-class"/>
+      </xsl:if>
+      <xsl:call-template name="commonattributes">
+        <xsl:with-param name="default-output-class" select="$default-fig-class"/>
+      </xsl:call-template>
+      <xsl:call-template name="setscale"/>
+      <xsl:call-template name="setidaname"/>
+      <div class="figbody">
+        <xsl:apply-templates select="node() except *[contains(@class, ' topic/title ') or contains(@class, ' topic/desc ')]"/>
+      </div>
+      <!-- WEK: Put the figure label below the figure content -->
+      <xsl:call-template name="place-fig-lbl"/>
+    </figure>
+    <xsl:apply-templates select="*[contains(@class, ' ditaot-d/ditaval-endprop ')]" mode="out-of-line"/>
+    <xsl:value-of select="$newline"/>
+  </xsl:template>
+  
   
   <xsl:template name="place-fig-lbl">
     <xsl:param name="stringName"/>
