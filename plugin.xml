@@ -18,7 +18,7 @@
   <!-- New way of specifying metadata with parameters contributed by the transtype:
         https://github.com/dita-ot/dita-ot/issues/1757
    -->
-  <transtype name="d4pCommons" abstract="true" extends="htmlBase">
+  <transtype name="d4pCommons" abstract="true" extends="base-html">
     <param name="title.only.topic.class.spec"
       desc="Specifies the @class attribute value to use for title-only topics generated from topicheads."
       type="string">
