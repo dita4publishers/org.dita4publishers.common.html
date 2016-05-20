@@ -197,7 +197,7 @@
       </xsl:when>
       <xsl:otherwise>
         <xsl:variable name="topicDocUri" select="string(document-uri(.))" as="xs:string"/>
-        <xsl:variable name="relSourcePath" select="relpath:getRelativePath(relpath:toUrl($tempdir), $topicDocUri)" as="xs:string"/>
+        <xsl:variable name="relSourcePath" select="relpath:getRelativePath($tempdir, $topicDocUri)" as="xs:string"/>
         <!--<xsl:message> + [DEBUG] getopic-result-url: relSourcePath="<xsl:sequence select="$relSourcePath"/>"</xsl:message>-->
         <xsl:variable name="parentPath" select="relpath:getParent($relSourcePath)" as="xs:string"/>
         <!--    <xsl:message> + [DEBUG] getopic-result-url: parentPath="<xsl:sequence select="$parentPath"/>"</xsl:message>-->
