@@ -19,4 +19,13 @@
     </xsl:call-template>
   </xsl:function>
 
+
+  <!-- message has been disabled from original template -->
+  <xsl:template name="getString">
+    <xsl:param name="stringName"/>
+    <xsl:call-template name="getVariable">
+      <xsl:with-param name="id" select="string($stringName)"/>
+    </xsl:call-template>
+  </xsl:template>
+
 </xsl:stylesheet>
