@@ -22,7 +22,7 @@
 <!--   -->
   <xsl:template name="getString">
     <xsl:param name="stringName"/>
-    <xsl:param name="stringFileList" select="document('allstrings.xml')/allstrings/stringfile"/>
+    <xsl:param name="stringFileList" select="document('../../../xsl/common/allstrings.xml')/allstrings/stringfile"/>
     <xsl:param name="stringFile">#none#</xsl:param>
     <xsl:param name="ancestorlang">
       <!-- Get the current language -->
