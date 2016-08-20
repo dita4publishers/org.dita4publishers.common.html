@@ -197,7 +197,7 @@
     >
     <!-- Construct values of the form 'props_{propname}_{propvalue}' -->
     <xsl:sequence 
-      select="for $token in tokenize(., ' ') return concat('props_', name(.), '_', $token, ' ')"
+      select="for $token in tokenize(., ' ') return concat('props_', name(.), '_', translate($token, '.', '_'), ' ')"
     />
   </xsl:template>
   
@@ -214,7 +214,7 @@
             
             <xsl:variable name="propname" select="regex-group(1)" as="xs:string"/>
             <xsl:variable name="propvalue" select="regex-group(2)" as="xs:string"/>
-            <xsl:sequence select="concat('props_', $propname, '_', $propvalue, ' ')"/>
+            <xsl:sequence select="concat('props_', $propname, '_', translate($propvalue, '.', '_'), ' ')"/>
           </xsl:matching-substring>
           <xsl:non-matching-substring>
             <!-- ignore it -->
