@@ -14,67 +14,14 @@
     <xsl:param name="ctx" as="node()?"/>
     <xsl:param name="id" as="xs:string"/>
 
-    <xsl:call-template name="getString">
-      <xsl:with-param name="stringName" select="$id"/>
-    </xsl:call-template>
+    <xsl:message> + [DEBUG] functions-lt-2.3.1: dita-ot:get-variable(): id="<xsl:value-of select="$id"/>"</xsl:message>
+    
+    <xsl:for-each select="$ctx">
+      <xsl:call-template name="getString">
+        <xsl:with-param name="stringName" select="$id"/>
+      </xsl:call-template>
+    </xsl:for-each>
   </xsl:function>
 
 
-  <!-- message has been disabled from original template -->
-  <xsl:template name="getString">
-    <xsl:param name="stringName"/>
-    <xsl:call-template name="getVariable">
-      <xsl:with-param name="id" select="string($stringName)"/>
-    </xsl:call-template>
-  </xsl:template>
-
-
- <xsl:template name="findString">
-    <xsl:param name="id" as="xs:string"/>
-    <xsl:param name="params" as="node()*"/>
-    <xsl:param name="ancestorlang" as="xs:string*"/>
-    <xsl:param name="defaultlang" as="xs:string*"/>
-
-    <xsl:variable name="l" select="($ancestorlang, $defaultlang)[1]" as="xs:string?"/>
-    <xsl:choose>
-      <xsl:when test="exists($l)">
-        <xsl:variable name="stringfile" select="$stringFiles[@xml:lang = $l]/@filename" as="xs:string*"/>
-        <xsl:variable name="str" as="element()*">
-          <xsl:for-each select="$stringfile">
-            <xsl:sequence select="document(., $stringFiles[1])/*/*[@name = $id or @id = $id]"/><!-- strings/str/@name opentopic-vars:vars/opentopic-vars:variable/@id -->
-          </xsl:for-each>
-        </xsl:variable>
-        <xsl:choose>
-          <xsl:when test="exists($str)">
-            <xsl:apply-templates select="$str[last()]" mode="processVariableBody">
-              <xsl:with-param name="params" select="$params"/>
-            </xsl:apply-templates>
-            <xsl:if test="empty($ancestorlang)">
-              <xsl:call-template name="output-message">
-                <xsl:with-param name="msgnum">001</xsl:with-param>
-                <xsl:with-param name="msgsev">W</xsl:with-param>
-                <xsl:with-param name="msgparams">%1=<xsl:value-of select="$id"/>;%2=<xsl:call-template name="getLowerCaseLang"/>;%3=<xsl:value-of select="$DEFAULTLANG"/></xsl:with-param>
-              </xsl:call-template>
-            </xsl:if>
-          </xsl:when>
-          <xsl:otherwise>
-            <xsl:call-template name="findString">
-              <xsl:with-param name="id" select="$id"/>
-              <xsl:with-param name="params" select="$params"/>
-              <xsl:with-param name="ancestorlang" select="$ancestorlang[position() gt 1]"/>
-              <xsl:with-param name="defaultlang" select="if (exists($ancestorlang)) then $defaultlang else $defaultlang[position() gt 1]"/>
-            </xsl:call-template>
-          </xsl:otherwise>
-        </xsl:choose>
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:value-of select="$id"/>
-        <!--xsl:call-template name="output-message">
-          <xsl:with-param name="msgnum">052</xsl:with-param>
-          <xsl:with-param name="msgsev">W</xsl:with-param>
-          <xsl:with-param name="msgparams">%1=<xsl:value-of select="$id"/></xsl:with-param>
-        </xsl:call-template-->
-      </xsl:otherwise>
-    </xsl:choose>    
-  </xsl:template>
 </xsl:stylesheet>
