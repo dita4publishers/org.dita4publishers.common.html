@@ -73,6 +73,7 @@
     <xsl:variable name="default-fig-class">
       <xsl:apply-templates select="." mode="dita2html:get-default-fig-class"/>
     </xsl:variable>
+    <xsl:call-template name="start-flagit"/>
     <div>
       <xsl:if test="$default-fig-class!=''">
         <xsl:attribute name="class"><xsl:value-of select="$default-fig-class"/></xsl:attribute>
@@ -93,6 +94,7 @@
       <!-- WEK: Put the figure label below the figure content -->
       <xsl:call-template name="place-fig-lbl"/>
     </div>
+    <xsl:call-template name="end-flagit"/>
     <xsl:value-of select="$newline"/>
   </xsl:template>
   
@@ -226,7 +228,7 @@
     >
     <!-- Construct values of the form 'props_{propname}_{propvalue}' -->
     <xsl:sequence 
-      select="for $token in tokenize(., ' ') return concat('props_', name(.), '_', translate($token, '.', '_'), ' ')"
+      select="for $token in tokenize(., ' ') return concat('props_', name(.), '_', $token, ' ')"
     />
   </xsl:template>
   
@@ -243,7 +245,7 @@
             
             <xsl:variable name="propname" select="regex-group(1)" as="xs:string"/>
             <xsl:variable name="propvalue" select="regex-group(2)" as="xs:string"/>
-            <xsl:sequence select="concat('props_', $propname, '_', translate($propvalue, '.', '_'), ' ')"/>
+            <xsl:sequence select="concat('props_', $propname, '_', $propvalue, ' ')"/>
           </xsl:matching-substring>
           <xsl:non-matching-substring>
             <!-- ignore it -->
