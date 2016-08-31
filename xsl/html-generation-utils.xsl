@@ -306,7 +306,7 @@
   <xsl:function name="htmlutil:getTopicheadHtmlResultTopicFilename" as="xs:string">
     <xsl:param name="topichead" as="element()"/>
 
-    <xsl:variable name="result" select="concat('topichead_', generate-id($topichead), '.html')" as="xs:string"/>
+    <xsl:variable name="result" select="concat('topichead_', generate-id($topichead), $OUTEXT)" as="xs:string"/>
     <xsl:sequence select="$result"/>
   </xsl:function>
 
