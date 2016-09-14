@@ -176,7 +176,7 @@
     <xsl:param name="outdir" as="xs:string"/>
 
     <xsl:variable name="topicHtmlFilename"
-      select="htmlutil:constructHtmlResultTopicFilename(.)"
+      select="htmlutil:constructHtmlResultTopicFilename(., $topicref)"
       as="xs:string"/>
 
     <xsl:variable name="resultUrl" select="relpath:newFile(relpath:newFile($outdir, $topicsOutputDir), $topicHtmlFilename)" as="xs:string"/>
@@ -193,6 +193,7 @@
       <xsl:when test="$fileOrganizationStrategy = 'single-dir'">
         <xsl:call-template name="get-result-topic-base-name-single-dir">
           <xsl:with-param name="topicUri" select="document-uri(.)" as="xs:string"/>
+          <xsl:with-param name="topicref" tunnel="yes" as="element()?" select="$topicref"/>
         </xsl:call-template>
       </xsl:when>
       <xsl:otherwise>
@@ -223,13 +224,28 @@
     <xsl:variable name="resultUrl" select="concat($baseTopicResultUrl, $OUTEXT)"/>
     <xsl:sequence select="$resultUrl"/>
   </xsl:template>
+  
+  <xsl:function name="htmlutil:constructHtmlResultTopicFilename" as="xs:string">
+    <xsl:param name="topic" as="document-node()"/>
+    <xsl:sequence select="htmlutil:constructHtmlResultTopicFilename($topic, ())"/>
+  </xsl:function>
 
   <xsl:function name="htmlutil:constructHtmlResultTopicFilename" as="xs:string">
     <xsl:param name="topic" as="document-node()"/>
+    <xsl:param name="topicref" as="element()?"/>
     <xsl:variable name="topicFilename"
-      select="concat(htmlutil:getResultTopicBaseName($topic), $OUTEXT)"
+      select="concat(htmlutil:getResultTopicBaseName($topic, $topicref), $OUTEXT)"
       as="xs:string"/>
     <xsl:sequence select="$topicFilename"/>
+  </xsl:function>
+    
+  <!--
+  Construct a reliably-unique base name for result topics that can then be used to
+  construct full filenames of different types.
+  -->
+  <xsl:function name="htmlutil:getResultTopicBaseName" as="xs:string">
+    <xsl:param name="topicDoc" as="document-node()"/>
+    <xsl:sequence select="htmlutil:getResultTopicBaseName($topicDoc, ())"></xsl:sequence>
   </xsl:function>
 
   <!--
@@ -238,6 +254,8 @@
     -->
   <xsl:function name="htmlutil:getResultTopicBaseName" as="xs:string">
     <xsl:param name="topicDoc" as="document-node()"/>
+    <xsl:param name="topicref" as="element()?"/>
+
     <xsl:variable name="topicUri" select="string(document-uri(root($topicDoc)))" as="xs:string"/>
     <xsl:variable name="baseName" as="xs:string">
       <xsl:choose>
@@ -245,12 +263,14 @@
           <xsl:for-each select="$topicDoc">
             <xsl:call-template name="get-result-topic-base-name-single-dir">
               <xsl:with-param name="topicUri" select="$topicUri" as="xs:string"/>
+              <xsl:with-param name="topicref" tunnel="yes" as="element()?" select="$topicref"/>
             </xsl:call-template>
           </xsl:for-each>
         </xsl:when>
         <xsl:otherwise>
           <xsl:apply-templates select="$topicDoc" mode="get-result-topic-base-name">
             <xsl:with-param name="topicUri" select="$topicUri" as="xs:string"/>
+            <xsl:with-param name="topicref" tunnel="yes" as="element()?" select="$topicref"/>
           </xsl:apply-templates>
         </xsl:otherwise>
       </xsl:choose>
