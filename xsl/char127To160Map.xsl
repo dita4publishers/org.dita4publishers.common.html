@@ -11,7 +11,8 @@
          1252 and ISO-8859-1 (see http://stackoverflow.com/questions/631406/what-is-the-difference-between-em-dash-151-and-8212)
        -->
     <xsl:output-character character="&#x9;" string="&#x0a;"/><!-- \t (tab) x9 -->
-    <xsl:output-character character="&#128;" string="&#x20AC;"/><!-- € x80 -->
+   <xsl:output-character character="&#127;" string="''"/><!-- Control character (delete), no mapping -->
+   <xsl:output-character character="&#128;" string="&#x20AC;"/><!-- € x80 -->
     <xsl:output-character character="&#130;" string="&#x201A;"/><!-- ‚ x82 -->
     <xsl:output-character character="&#131;" string="&#x0192;"/><!-- ƒ x83 -->
     <xsl:output-character character="&#132;" string="&#x201E;"/><!-- „ x84 -->
