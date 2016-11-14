@@ -7,7 +7,9 @@
   xmlns:dita2html="http://dita-ot.sourceforge.net/ns/200801/dita2html"  
   xmlns:df="http://dita2indesign.org/dita/functions"
   xmlns:enum="http://dita4publishers.org/enumerables"
-  exclude-result-prefixes="xs xd relpath java dita2html df enum"
+  xmlns:dita-ot="http://dita-ot.sourceforge.net/ns/201007/dita-ot"
+  
+  exclude-result-prefixes="xs xd relpath java dita2html df enum dita-ot"
   xmlns="http://www.w3.org/1999/xhtml"  
   version="2.0">
   
@@ -32,29 +34,11 @@
     <xsl:variable name="baseUri" as="xs:string" 
       select="relpath:getParent($xtrf)"/>
     
-    <xsl:variable name="width">
-      <xsl:choose>
-        <xsl:when test="not(contains(../@href,'://'))">
-          <xsl:value-of select="java:getWidth($baseUri, string(../@origHref))"/>
-        </xsl:when>
-        <xsl:otherwise/>
-      </xsl:choose>
-    </xsl:variable>
-    <xsl:variable name="height">
-      <xsl:choose>
-        <xsl:when test="not(contains(../@href,'://'))">
-          <xsl:value-of select="java:getHeight($baseUri, string(../@origHref))"/>
-        </xsl:when>
-        <xsl:otherwise/>
-      </xsl:choose>
-    </xsl:variable>
+    <xsl:variable name="width" select="../@dita-ot:image-width"/>
+    <xsl:variable name="height" select="../@dita-ot:image-height"/>
     <xsl:if test="not(../@width) and not(../@height)">
-      <xsl:attribute name="height">
-        <xsl:value-of select="floor(number($height) * number(.) div 100)"/>
-      </xsl:attribute>
-      <xsl:attribute name="width">
-        <xsl:value-of select="floor(number($width) * number(.) div 100)"/>
-      </xsl:attribute>
+      <xsl:attribute name="height" select="floor(number($height) * number(.) div 100)"/>
+      <xsl:attribute name="width" select="floor(number($width) * number(.) div 100)"/>
     </xsl:if>
   </xsl:template>
   
