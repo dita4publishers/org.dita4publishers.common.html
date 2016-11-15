@@ -36,8 +36,8 @@
                Once that bug is fixed the check should be unnecessary.
       -->
     <span class='enumeration_part'>      
-      <xsl:call-template name="getString">
-        <xsl:with-param name="stringName" select="'Part'"/>
+      <xsl:call-template name="getVariable">
+        <xsl:with-param name="id" select="'Part'"/>
       </xsl:call-template>
       <xsl:number count="*[df:class(., 'bookmap/part')][not(df:isResourceOnly(.))]" format="I" level="single"/>
       <xsl:text>. </xsl:text>
@@ -52,8 +52,8 @@
                Once that bug is fixed the check should be unnecessary.
       -->
     <span class='enumeration_chapter'>
-      <xsl:call-template name="getString">
-        <xsl:with-param name="stringName" select="'Chapter'"/>
+      <xsl:call-template name="getVariable">
+        <xsl:with-param name="id" select="'Chapter'"/>
       </xsl:call-template>
       <xsl:number 
         count="*[df:class(., 'bookmap/chapter')][not(df:isResourceOnly(.))]" 
