@@ -17,8 +17,8 @@
 <!--    <xsl:message> + [DEBUG] functions-lt-2.3.1: dita-ot:get-variable(): id="<xsl:value-of select="$id"/>"</xsl:message>-->
     
     <xsl:for-each select="$ctx">
-      <xsl:call-template name="getString">
-        <xsl:with-param name="stringName" select="$id"/>
+      <xsl:call-template name="getVariable">
+        <xsl:with-param name="id" select="$id"/>
       </xsl:call-template>
     </xsl:for-each>
   </xsl:function>

@@ -43,13 +43,13 @@
           <xsl:when test="((string-length($ancestorlang) = 5 and contains($ancestorlang, 'hu-hu')) or
                            (string-length($ancestorlang) = 2 and contains($ancestorlang, 'hu')) )">
            <xsl:value-of select="$figNumber"/><xsl:text>. </xsl:text>
-           <xsl:call-template name="getString">
-            <xsl:with-param name="stringName" select="'Figure'"/>
+           <xsl:call-template name="getVariable">
+            <xsl:with-param name="id" select="'Figure'"/>
            </xsl:call-template><xsl:text> </xsl:text>
           </xsl:when>
           <xsl:otherwise>
-            <xsl:call-template name="getString">
-             <xsl:with-param name="stringName" select="'Figure'"/>
+            <xsl:call-template name="getVariable">
+             <xsl:with-param name="id" select="'Figure'"/>
             </xsl:call-template>
             <xsl:text> </xsl:text>
             <xsl:value-of select="$figNumber"/>
@@ -80,13 +80,13 @@
           <xsl:when test="((string-length($ancestorlang) = 5 and contains($ancestorlang, 'hu-hu')) or
                            (string-length($ancestorlang) = 2 and contains($ancestorlang, 'hu')) )">
            <xsl:value-of select="$tableNumber"/><xsl:text>. </xsl:text>
-           <xsl:call-template name="getString">
-            <xsl:with-param name="stringName" select="'Table'"/>
+           <xsl:call-template name="getVariable">
+            <xsl:with-param name="id" select="'Table'"/>
            </xsl:call-template>
           </xsl:when>
           <xsl:otherwise>
-           <xsl:call-template name="getString">
-            <xsl:with-param name="stringName" select="'Table'"/>
+           <xsl:call-template name="getVariable">
+            <xsl:with-param name="id" select="'Table'"/>
            </xsl:call-template>
             <xsl:text> </xsl:text>
             <xsl:value-of select="$tableNumber"/>
@@ -101,8 +101,8 @@
   <xsl:template mode="enumeration" match="*[df:class(., 'pubmap-d/part')]"
     priority="10">
     <span class='enumeration_part'>
-        <xsl:call-template name="getString">
-          <xsl:with-param name="stringName" select="'Part'"/>
+        <xsl:call-template name="getVariable">
+          <xsl:with-param name="id" select="'Part'"/>
         </xsl:call-template>
       <!-- When maps are merged, if there are two root topicrefs, both get the class of the referencing
            topicref, e.g., <keydefs/><part/> as the children of the target map becomes two mapref topicrefs in the
@@ -116,8 +116,8 @@
     match="*[df:class(., 'pubmap-d/pubbody')]//*[df:class(., 'pubmap-d/chapter')]"
     >
     <span class='enumeration_chapter'>
-        <xsl:call-template name="getString">
-          <xsl:with-param name="stringName" select="'Chapter'"/>
+        <xsl:call-template name="getVariable">
+          <xsl:with-param name="id" select="'Chapter'"/>
         </xsl:call-template>
       <xsl:number
         count="*[df:class(., 'pubmap-d/chapter')][not(@processing-role = 'resource-only')]"
@@ -139,8 +139,8 @@
     *[df:class(., 'pubmap-d/appendixes')]/*[df:isTopicRef(.)]
     ">
     <span class='enumeration_chapter'>
-        <xsl:call-template name="getString">
-          <xsl:with-param name="stringName" select="'Appendix'"/>
+        <xsl:call-template name="getVariable">
+          <xsl:with-param name="id" select="'Appendix'"/>
         </xsl:call-template>
       <xsl:number
         count="*[df:class(., 'map/topicref')][not(@processing-role = 'resource-only')]"

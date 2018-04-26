@@ -7,7 +7,9 @@
   xmlns:dita2html="http://dita-ot.sourceforge.net/ns/200801/dita2html"  
   xmlns:df="http://dita2indesign.org/dita/functions"
   xmlns:enum="http://dita4publishers.org/enumerables"
-  exclude-result-prefixes="xs xd relpath java dita2html df enum"
+  xmlns:dita-ot="http://dita-ot.sourceforge.net/ns/201007/dita-ot"
+  
+  exclude-result-prefixes="xs xd relpath java dita2html df enum dita-ot"
   xmlns="http://www.w3.org/1999/xhtml"  
   version="2.0">
   
@@ -21,6 +23,24 @@
   
   <xsl:include href="flaggingOverrides.xsl"/>
  
+
+  <!-- This is an override of the same template from dita2htmlmpl.xsl. It 
+       uses xtrf rather than $OUTPUTDIR to provide the location of the
+       graphic as authored, not as output.
+    -->
+  <xsl:template match="*[contains(@class,' topic/image ')]/@scale">
+    
+    <xsl:variable name="xtrf" as="xs:string" select="../@xtrf"/>
+    <xsl:variable name="baseUri" as="xs:string" 
+      select="relpath:getParent($xtrf)"/>
+    
+    <xsl:variable name="width" select="../@dita-ot:image-width"/>
+    <xsl:variable name="height" select="../@dita-ot:image-height"/>
+    <xsl:if test="not(../@width) and not(../@height)">
+      <xsl:attribute name="height" select="floor(number($height) * number(.) div 100)"/>
+      <xsl:attribute name="width" select="floor(number($width) * number(.) div 100)"/>
+    </xsl:if>
+  </xsl:template>
   
     <!-- Add for bodydiv  and sectiondiv-->
   <xsl:template match="*[contains(@class,' topic/bodydiv ') or contains(@class, ' topic/sectiondiv ')]">
