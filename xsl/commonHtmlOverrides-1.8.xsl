@@ -95,7 +95,7 @@
       <xsl:call-template name="place-fig-lbl"/>
     </div>
     <xsl:call-template name="end-flagit"/>
-    <xsl:value-of select="$newline"/>
+    <xsl:value-of select="'&#x0a;'"/>
   </xsl:template>
   
   <!-- OT 2.x version: -->
@@ -122,7 +122,7 @@
       <xsl:call-template name="place-fig-lbl"/>
     </figure>
     <xsl:apply-templates select="*[contains(@class, ' ditaot-d/ditaval-endprop ')]" mode="out-of-line"/>
-    <xsl:value-of select="$newline"/>
+    <xsl:value-of select="'&#x0a;'"/>
   </xsl:template>
   
   
