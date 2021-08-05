@@ -9,7 +9,7 @@
   xmlns:enum="http://dita4publishers.org/enumerables"
   exclude-result-prefixes="xs xd relpath java dita2html df enum"
   xmlns="http://www.w3.org/1999/xhtml"  
-  version="2.0">
+  version="3.0">
   
   <!-- Common overrides to the base HTML transforms. Used by HTML2, EPUB
        Kindle, etc.

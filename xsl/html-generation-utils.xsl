@@ -7,7 +7,7 @@
   xmlns:htmlutil="http://dita4publishers.org/functions/htmlutil"
   xmlns:relpath="http://dita2indesign/functions/relpath"
   exclude-result-prefixes="xs htmlutil relpath df"
-  version="2.0">
+  version="3.0">
 <!--
   <xsl:import href="dita-support-lib.xsl"/>
   <xsl:import href="relpath_util.xsl"/>

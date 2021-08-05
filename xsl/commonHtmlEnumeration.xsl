@@ -11,7 +11,7 @@
   xmlns:enum="http://dita4publishers.org/enumerables"
   xmlns="http://www.w3.org/1999/xhtml"
   exclude-result-prefixes="df xs relpath htmlutil opf dc xd enum d4p"
-  version="2.0">
+  version="3.0">
 
   <xsl:param name="d4p.numberTables" as="xs:string" select="'xxxx'"/>
   <xsl:variable name="d4p:doNumberTables" as="xs:boolean"

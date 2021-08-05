@@ -2,7 +2,7 @@
   xmlns:xs="http://www.w3.org/2001/XMLSchema"
   xmlns:xd="http://www.oxygenxml.com/ns/doc/xsl"
   exclude-result-prefixes="xs xd"
-  version="2.0">
+  version="3.0">
 
  <xsl:character-map name="chars-127to160">
     <!-- Map characters 127 to 160, which are invalid HTML characters

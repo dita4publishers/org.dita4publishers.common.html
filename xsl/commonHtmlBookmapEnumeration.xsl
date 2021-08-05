@@ -10,7 +10,7 @@
   xmlns:enum="http://dita4publishers.org/enumerables"
   xmlns="http://www.w3.org/1999/xhtml"  
   exclude-result-prefixes="df xs relpath htmlutil opf dc xd enum"
-  version="2.0">
+  version="3.0">
   
   <!-- 
     DITA Map to HTML-based outputs
