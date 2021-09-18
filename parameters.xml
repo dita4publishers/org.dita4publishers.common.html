@@ -1,7 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<params>
+<params
+  
+  >
   <!-- Parameters common to all D4P transformations. -->
-  <param name="d4p.numberFigures" expression="${d4p.number.figures}" if="d4p.number.figures"/>
-  <param name="d4p.numberTables" expression="${d4p.number.tables}" if="d4p.number.tables"/>
+  <param name="d4p.numberFigures" expression="${d4p.number.figures}" if:set="d4p.number.figures"
+    xmlns:if="ant:if"
+    xmlns:unless="ant:unless"
+  />
+  <param name="d4p.numberTables" expression="${d4p.number.tables}" if:set="d4p.number.tables"
+    xmlns:if="ant:if"
+    xmlns:unless="ant:unless"
+  />
 
 </params>

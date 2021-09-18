@@ -10,7 +10,8 @@
   xmlns:dita-ot="http://dita-ot.sourceforge.net/ns/201007/dita-ot"
   
   exclude-result-prefixes="xs xd relpath java dita2html df enum dita-ot"
-  xmlns="http://www.w3.org/1999/xhtml"  
+  xmlns="http://www.w3.org/1999/xhtml"
+  expand-text="yes"
   version="3.0">
   
   <!-- Common overrides to the base HTML transforms. Used by HTML2, EPUB
@@ -29,14 +30,21 @@
        graphic as authored, not as output.
     -->
   <xsl:template match="*[contains(@class,' topic/image ')]/@scale">
+    <xsl:param name="doDebug" as="xs:boolean" tunnel="yes" select="false()"/>
     
+    <xsl:variable name="doDebug" as="xs:boolean" select="$doDebug or true()"/>
     <xsl:variable name="xtrf" as="xs:string" select="../@xtrf"/>
     <xsl:variable name="baseUri" as="xs:string" 
       select="relpath:getParent($xtrf)"/>
-    
+
+    <!-- NOTE: In 3.x (and maybe earlier) the dita-ot:image-* attributes are added by
+               the html5.image-metadata process, which is called from the html5.init
+               target. If that process doesn't run then these attributes will not be set.
+      -->
     <xsl:variable name="width" select="../@dita-ot:image-width"/>
     <xsl:variable name="height" select="../@dita-ot:image-height"/>
-    <xsl:if test="not(../@width) and not(../@height)">
+    
+    <xsl:if test="not(../@width) and not(../@height) and ($width ne '' and $height ne '')">
       <xsl:attribute name="height" select="floor(number($height) * number(.) div 100)"/>
       <xsl:attribute name="width" select="floor(number($width) * number(.) div 100)"/>
     </xsl:if>
